@@ -2,7 +2,7 @@
   "use strict";
   const { api, showError, esc, currentUser, openModal, closeModal, formError } = window.Biblio;
 
-  const roleLabels = { adherent: "Adhérent", bibliothecaire: "Bibliothécaire", superadmin: "Superadmin" };
+  const roleLabels = { adherent: "Adhérent", bibliothecaire: "Bibliothécaire", superadmin: "Administrateur général" };
 
   async function loadUsers() {
     try {
@@ -25,7 +25,7 @@
   /* ---------- Formulaires ---------- */
   const roleOptions = (selected = "") => `
     <option value="bibliothecaire" ${selected === "bibliothecaire" ? "selected" : ""}>Bibliothécaire</option>
-    <option value="superadmin" ${selected === "superadmin" ? "selected" : ""}>Superadmin</option>
+    <option value="superadmin" ${selected === "superadmin" ? "selected" : ""}>Administrateur général</option>
     <option value="adherent" ${selected === "adherent" ? "selected" : ""}>Adhérent</option>
   `;
 

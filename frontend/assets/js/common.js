@@ -4,11 +4,21 @@
   // (window.APP_API_URL, voir config.js + docker-entrypoint.d). Vide = même
   // origine (développement local, `npm run dev`).
   const API = (window.APP_API_URL || "").replace(/\/+$/, "");
-  const TOKEN_KEY = "biblio_token";
-  const USER_KEY = "biblio_user";
+  const TOKEN_KEY = "bibliotheque_token";
+  const USER_KEY = "bibliotheque_user";
 
-  let token = localStorage.getItem(TOKEN_KEY);
-  let currentUser = JSON.parse(localStorage.getItem(USER_KEY) || "null");
+  let token = null;
+  let currentUser = null;
+
+  try {
+    token = localStorage.getItem(TOKEN_KEY);
+    currentUser = JSON.parse(localStorage.getItem(USER_KEY) || "null");
+  } catch (err) {
+    token = null;
+    currentUser = null;
+    localStorage.removeItem(TOKEN_KEY);
+    localStorage.removeItem(USER_KEY);
+  }
 
   /* ---------- Garde d'authentification (pages du shell uniquement) ---------- */
   const page = document.body.dataset.page;
@@ -99,14 +109,18 @@
   async function api(path, options = {}, raw = false) {
     const headers = { "Content-Type": "application/json" };
     if (token) headers.Authorization = `Bearer ${token}`;
+
     const res = await fetch(API + path, { headers, ...options });
     if (res.status === 401 && !path.startsWith("/api/auth/login") && !raw) {
       logout();
       throw new Error("Session expirée, reconnectez-vous.");
     }
-    const data = await res.json().catch(() => ({}));
-    if (!res.ok) throw new Error(data.message || `Erreur ${res.status}`);
-    return raw ? data : data.data;
+
+    const hasBody = res.status !== 204 && res.headers.get("content-type")?.includes("application/json");
+    const data = hasBody ? await res.json().catch(() => ({})) : null;
+    if (!res.ok) throw new Error(data?.message || `Erreur ${res.status}`);
+
+    return raw ? data : (data ? data.data : null);
   }
   const esc = (s) => String(s ?? "—").replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
 

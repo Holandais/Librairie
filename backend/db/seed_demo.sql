@@ -1,29 +1,43 @@
+SET client_encoding = 'UTF8';
+
 -- Seed de démonstration complet pour la bibliothèque.
--- NOTE : réplique de db/seed.sql (garder les deux en synchro).
--- ATTENTION : conçu pour tourner APRÈS un TRUNCATE ... RESTART IDENTITY
--- (les identifiants sont codés en dur). start.sh ne l'exécute que si
--- SEED_ON_START=true, après avoir vidé les tables (idempotent).
--- Détruit donc toutes les données existantes au chargement.
--- Comptes staff : admin@biblio.fr / superadmin123 et biblio@biblio.fr / biblio123
+-- Données d'exemple génériques, sans références à un propriétaire ou une structure externe.
+
+-- Comptes staff : admin@bibliotheque.local / GHS et bibliothecaire@bibliotheque.local / biblio123
 -- Adhérents : mot de passe commun "adherent123" (public, à changer en prod).
 
 -- Utilisateurs
--- hash bcrypt de "superadmin123", "biblio123", "adherent123"
+-- hash bcrypt de "GHS", "biblio123", "adherent123"
 INSERT INTO users (nom, telephone, email, password, role) VALUES
-('Mabiala Nzau'        , '81 100 00 01', 'admin@biblio.fr'     , '$2b$10$sKg.Uviz8EgdcCA2PvKSvej3rSXdErgAApM9ZFFPo3oX2MCY85EBG', 'superadmin'),
-('Esther Lumbu'        , '81 100 00 02', 'biblio@biblio.fr'    , '$2b$10$xRWAcKEANK5GfpuZNsvScenlKraOujuUVl/eu2YTlAfDNl9EQimkq', 'bibliothecaire'),
-('Kimbangu Mwamba'     , '81 234 56 78', 'k.mwamba@mail.cd'    , '$2b$10$U005tSbISlvKfTP9XnBv.evJ0rws3cU9Hxd3CDZsXbhSLcC/0ZUKW', 'adherent'),
-('Nsimba Mbuyi'        , '82 345 67 89', 'n.mbuyi@mail.cd'     , '$2b$10$U005tSbISlvKfTP9XnBv.evJ0rws3cU9Hxd3CDZsXbhSLcC/0ZUKW', 'adherent'),
-('Kazadi Ilunga'       , '84 456 78 90', 'k.ilunga@mail.cd'    , '$2b$10$U005tSbISlvKfTP9XnBv.evJ0rws3cU9Hxd3CDZsXbhSLcC/0ZUKW', 'adherent'),
-('Mulumba Ngoie'       , '85 567 89 01', 'm.ngoie@mail.cd'     , '$2b$10$U005tSbISlvKfTP9XnBv.evJ0rws3cU9Hxd3CDZsXbhSLcC/0ZUKW', 'adherent'),
-('Kalonda Bibiche'     , '89 678 90 12', 'k.bibiche@mail.cd'   , '$2b$10$U005tSbISlvKfTP9XnBv.evJ0rws3cU9Hxd3CDZsXbhSLcC/0ZUKW', 'adherent'),
-('Mbala Kanza'         , '90 789 01 23', 'm.kanza@mail.cd'     , '$2b$10$U005tSbISlvKfTP9XnBv.evJ0rws3cU9Hxd3CDZsXbhSLcC/0ZUKW', 'adherent'),
-('Tshibanda Lunda'     , '97 890 12 34', 't.lunda@mail.cd'     , '$2b$10$U005tSbISlvKfTP9XnBv.evJ0rws3cU9Hxd3CDZsXbhSLcC/0ZUKW', 'adherent'),
-('Bakala Songa'        , '99 901 23 45', 'b.songa@mail.cd'     , '$2b$10$U005tSbISlvKfTP9XnBv.evJ0rws3cU9Hxd3CDZsXbhSLcC/0ZUKW', 'adherent'),
-('Nkulu Kanku'         , '81 012 34 56', 'n.kanku@mail.cd'     , '$2b$10$U005tSbISlvKfTP9XnBv.evJ0rws3cU9Hxd3CDZsXbhSLcC/0ZUKW', 'adherent'),
-('Mwela Manga'         , '82 123 45 67', 'm.manga@mail.cd'     , '$2b$10$U005tSbISlvKfTP9XnBv.evJ0rws3cU9Hxd3CDZsXbhSLcC/0ZUKW', 'adherent'),
-('Tshimanga Kabongo'   , '84 234 56 78', 't.kabongo@mail.cd'   , '$2b$10$U005tSbISlvKfTP9XnBv.evJ0rws3cU9Hxd3CDZsXbhSLcC/0ZUKW', 'adherent'),
-('Lusamba Nzuzi'       , '85 345 67 89', 'l.nzuzi@mail.cd'     , '$2b$10$U005tSbISlvKfTP9XnBv.evJ0rws3cU9Hxd3CDZsXbhSLcC/0ZUKW', 'adherent');
+('Admin principal'      , '01 000 00 01', 'admin@bibliotheque.local'      , '$2b$10$T3nXbAAeGVOUDrJbr.Arr.5hF0w/pTE1ap/SX.YXqkx9kdeKS1AV.', 'superadmin'),
+('Bibliothécaire'       , '01 000 00 02', 'bibliothecaire@bibliotheque.local', '$2b$10$xRWAcKEANK5GfpuZNsvScenlKraOujuUVl/eu2YTlAfDNl9EQimkq', 'bibliothecaire'),
+('Amina Diop'           , '01 234 56 78', 'adh1@bibliotheque.local'       , '$2b$10$U005tSbISlvKfTP9XnBv.evJ0rws3cU9Hxd3CDZsXbhSLcC/0ZUKW', 'adherent'),
+('Moussa Diallo'        , '02 345 67 89', 'adh2@bibliotheque.local'       , '$2b$10$U005tSbISlvKfTP9XnBv.evJ0rws3cU9Hxd3CDZsXbhSLcC/0ZUKW', 'adherent'),
+('Sophie Kouassi'       , '03 456 78 90', 'adh3@bibliotheque.local'       , '$2b$10$U005tSbISlvKfTP9XnBv.evJ0rws3cU9Hxd3CDZsXbhSLcC/0ZUKW', 'adherent'),
+('Ibrahim Toure'        , '04 567 89 01', 'adh4@bibliotheque.local'       , '$2b$10$U005tSbISlvKfTP9XnBv.evJ0rws3cU9Hxd3CDZsXbhSLcC/0ZUKW', 'adherent'),
+('Nadia Cissé'          , '05 678 90 12', 'adh5@bibliotheque.local'       , '$2b$10$U005tSbISlvKfTP9XnBv.evJ0rws3cU9Hxd3CDZsXbhSLcC/0ZUKW', 'adherent'),
+('Yacouba Nikiema'      , '06 789 01 23', 'adh6@bibliotheque.local'       , '$2b$10$U005tSbISlvKfTP9XnBv.evJ0rws3cU9Hxd3CDZsXbhSLcC/0ZUKW', 'adherent'),
+('Lina Akou'            , '07 890 12 34', 'adh7@bibliotheque.local'       , '$2b$10$U005tSbISlvKfTP9XnBv.evJ0rws3cU9Hxd3CDZsXbhSLcC/0ZUKW', 'adherent'),
+('Paul Nguema'         , '08 901 23 45', 'adh8@bibliotheque.local'       , '$2b$10$U005tSbISlvKfTP9XnBv.evJ0rws3cU9Hxd3CDZsXbhSLcC/0ZUKW', 'adherent'),
+('Aïcha Kamara'        , '09 012 34 56', 'adh9@bibliotheque.local'       , '$2b$10$U005tSbISlvKfTP9XnBv.evJ0rws3cU9Hxd3CDZsXbhSLcC/0ZUKW', 'adherent'),
+('Celestin Amani'       , '10 123 45 67', 'adh10@bibliotheque.local'      , '$2b$10$U005tSbISlvKfTP9XnBv.evJ0rws3cU9Hxd3CDZsXbhSLcC/0ZUKW', 'adherent'),
+('Ruth Djebar'         , '11 234 56 78', 'adh11@bibliotheque.local'      , '$2b$10$U005tSbISlvKfTP9XnBv.evJ0rws3cU9Hxd3CDZsXbhSLcC/0ZUKW', 'adherent'),
+('Mamadou Fall'        , '12 345 67 89', 'adh12@bibliotheque.local'      , '$2b$10$U005tSbISlvKfTP9XnBv.evJ0rws3cU9Hxd3CDZsXbhSLcC/0ZUKW', 'adherent'),
+('Hélène Ndoye'        , '13 456 78 90', 'adh13@bibliotheque.local'      , '$2b$10$U005tSbISlvKfTP9XnBv.evJ0rws3cU9Hxd3CDZsXbhSLcC/0ZUKW', 'adherent'),
+('Blaise Mendy'        , '14 567 89 01', 'adh14@bibliotheque.local'      , '$2b$10$U005tSbISlvKfTP9XnBv.evJ0rws3cU9Hxd3CDZsXbhSLcC/0ZUKW', 'adherent'),
+('Fanta Diarra'        , '15 678 90 12', 'adh15@bibliotheque.local'      , '$2b$10$U005tSbISlvKfTP9XnBv.evJ0rws3cU9Hxd3CDZsXbhSLcC/0ZUKW', 'adherent'),
+('Josephine Koffi'     , '16 789 01 23', 'adh16@bibliotheque.local'      , '$2b$10$U005tSbISlvKfTP9XnBv.evJ0rws3cU9Hxd3CDZsXbhSLcC/0ZUKW', 'adherent'),
+('Ousmane Sow'         , '17 890 12 34', 'adh17@bibliotheque.local'      , '$2b$10$U005tSbISlvKfTP9XnBv.evJ0rws3cU9Hxd3CDZsXbhSLcC/0ZUKW', 'adherent'),
+('Salimata Yao'        , '18 901 23 45', 'adh18@bibliotheque.local'      , '$2b$10$U005tSbISlvKfTP9XnBv.evJ0rws3cU9Hxd3CDZsXbhSLcC/0ZUKW', 'adherent'),
+('Emmanuel Dossou'     , '19 012 34 56', 'adh19@bibliotheque.local'      , '$2b$10$U005tSbISlvKfTP9XnBv.evJ0rws3cU9Hxd3CDZsXbhSLcC/0ZUKW', 'adherent'),
+('Khadija Benali'      , '20 123 45 67', 'adh20@bibliotheque.local'      , '$2b$10$U005tSbISlvKfTP9XnBv.evJ0rws3cU9Hxd3CDZsXbhSLcC/0ZUKW', 'adherent'),
+('François Okafor'     , '21 234 56 78', 'adh21@bibliotheque.local'      , '$2b$10$U005tSbISlvKfTP9XnBv.evJ0rws3cU9Hxd3CDZsXbhSLcC/0ZUKW', 'adherent'),
+('Saliou Mbaye'        , '22 345 67 89', 'adh22@bibliotheque.local'      , '$2b$10$U005tSbISlvKfTP9XnBv.evJ0rws3cU9Hxd3CDZsXbhSLcC/0ZUKW', 'adherent'),
+('Mariam Touré'        , '23 456 78 90', 'adh23@bibliotheque.local'      , '$2b$10$U005tSbISlvKfTP9XnBv.evJ0rws3cU9Hxd3CDZsXbhSLcC/0ZUKW', 'adherent'),
+('Awa Sarr'            , '24 567 89 01', 'adh24@bibliotheque.local'      , '$2b$10$U005tSbISlvKfTP9XnBv.evJ0rws3cU9Hxd3CDZsXbhSLcC/0ZUKW', 'adherent'),
+('Yvonne Koné'         , '25 678 90 12', 'adh25@bibliotheque.local'      , '$2b$10$U005tSbISlvKfTP9XnBv.evJ0rws3cU9Hxd3CDZsXbhSLcC/0ZUKW', 'adherent'),
+('Daniel Mba'          , '26 789 01 23', 'adh26@bibliotheque.local'      , '$2b$10$U005tSbISlvKfTP9XnBv.evJ0rws3cU9Hxd3CDZsXbhSLcC/0ZUKW', 'adherent'),
+('Natacha Soro'       , '27 890 12 34', 'adh27@bibliotheque.local'      , '$2b$10$U005tSbISlvKfTP9XnBv.evJ0rws3cU9Hxd3CDZsXbhSLcC/0ZUKW', 'adherent');
 
 -- Auteurs français
 INSERT INTO auteurs (nom, nationalite) VALUES
@@ -90,6 +104,85 @@ INSERT INTO livres (titre, auteur_id, annee_publication, disponible) VALUES
 ('Les Mains sales'                    , 13, 1948, FALSE),
 ('L''Amant'                           , 14, 1984, TRUE),
 ('Moderato cantabile'                 , 14, 1958, TRUE);
+
+-- Auteurs internationaux
+INSERT INTO auteurs (nom, nationalite) VALUES
+('George Orwell', 'Anglaise'),
+('Ernest Hemingway', 'Américaine'),
+('Franz Kafka', 'Autrichienne'),
+('Leo Tolstoï', 'Russe'),
+('Fyodor Dostoïevski', 'Russe'),
+('Jorge Luis Borges', 'Argentine'),
+('Gabriel García Márquez', 'Colombienne'),
+('Haruki Murakami', 'Japonaise'),
+('Milan Kundera', 'Tchèque'),
+('Naguib Mahfouz', 'Égyptienne'),
+('Miguel de Cervantes', 'Espagnole'),
+('Virginia Woolf', 'Anglaise'),
+('Hermann Hesse', 'Allemande'),
+('Khalil Gibran', 'Libanaise'),
+('F. Scott Fitzgerald', 'Américaine'),
+('Chinua Achebe', 'Nigériane'),
+('Ngũgĩ wa Thiong''o', 'Kényane'),
+('Aminata Sow Fall', 'Sénégalaise'),
+('Sembène Ousmane', 'Sénégalaise'),
+('Mariama Bâ', 'Sénégalaise'),
+('Camara Laye', 'Guinéenne'),
+('Tayeb Salih', 'Soudienne'),
+('Bessie Head', 'Botswanaise'),
+('Ken Bugul', 'Sénégalaise'),
+('Ahmedou Ould-Abdallah', 'Mauritanienne');
+
+-- Livres complémentaires internationaux pour diversifier le catalogue.
+INSERT INTO livres (titre, auteur_id, annee_publication, disponible)
+SELECT v.titre, a.id, v.annee_publication, v.disponible
+FROM (VALUES
+  ('1984', 'George Orwell', 1949, TRUE),
+  ('La Ferme des animaux', 'George Orwell', 1945, TRUE),
+  ('Pour qui sonne le glas', 'Ernest Hemingway', 1940, TRUE),
+  ('Le Soleil se lève aussi', 'Ernest Hemingway', 1926, TRUE),
+  ('Le Procès', 'Franz Kafka', 1925, TRUE),
+  ('La Métamorphose', 'Franz Kafka', 1915, TRUE),
+  ('Guerre et Paix', 'Leo Tolstoï', 1869, TRUE),
+  ('Anna Karénine', 'Leo Tolstoï', 1877, TRUE),
+  ('Crime et Châtiment', 'Fyodor Dostoïevski', 1866, TRUE),
+  ('Les Frères Karamazov', 'Fyodor Dostoïevski', 1880, TRUE),
+  ('Fictions', 'Jorge Luis Borges', 1944, TRUE),
+  ('Le Livre de sable', 'Jorge Luis Borges', 1977, TRUE),
+  ('Cent ans de solitude', 'Gabriel García Márquez', 1967, TRUE),
+  ('L''Automne du patriarche', 'Gabriel García Márquez', 1975, TRUE),
+  ('Kafka sur le rivage', 'Haruki Murakami', 2002, TRUE),
+  ('Étrange beauté', 'Haruki Murakami', 2004, TRUE),
+  ('L''Insoutenable légèreté de l''être', 'Milan Kundera', 1984, TRUE),
+  ('La Vie est ailleurs', 'Milan Kundera', 1959, TRUE),
+  ('Le Caire des mille minarets', 'Naguib Mahfouz', 1957, TRUE),
+  ('Les Enfants de la rue', 'Naguib Mahfouz', 1959, TRUE),
+  ('Don Quichotte', 'Miguel de Cervantes', 1605, TRUE),
+  ('Mrs Dalloway', 'Virginia Woolf', 1925, TRUE),
+  ('Au phare', 'Virginia Woolf', 1927, TRUE),
+  ('Siddhartha', 'Hermann Hesse', 1922, TRUE),
+  ('Demian', 'Hermann Hesse', 1919, TRUE),
+  ('Le Prophète', 'Khalil Gibran', 1923, TRUE),
+  ('Le Grand Gatsby', 'F. Scott Fitzgerald', 1925, TRUE),
+  ('Tout s''effondre', 'Chinua Achebe', 1958, TRUE),
+  ('Une vie de douleur', 'Chinua Achebe', 1960, TRUE),
+  ('Le Sceau de la rivière', 'Ngũgĩ wa Thiong''o', 1977, TRUE),
+  ('Le Complot contre l''homme', 'Ngũgĩ wa Thiong''o', 1982, TRUE),
+  ('Le Rêve du vieil homme', 'Aminata Sow Fall', 1979, TRUE),
+  ('Le dernier jour', 'Aminata Sow Fall', 1985, TRUE),
+  ('Les bouts de bois de Dieu', 'Sembène Ousmane', 1960, TRUE),
+  ('L''hôte', 'Sembène Ousmane', 1962, TRUE),
+  ('Une si longue lettre', 'Mariama Bâ', 1979, TRUE),
+  ('Le Baudrier', 'Mariama Bâ', 1980, TRUE),
+  ('L''enfant noir', 'Camara Laye', 1953, TRUE),
+  ('Le regard du roi', 'Camara Laye', 1954, TRUE),
+  ('La Saison de la migration vers le nord', 'Tayeb Salih', 1966, TRUE),
+  ('La femme du village', 'Bessie Head', 1967, TRUE),
+  ('Cendres et diamants', 'Bessie Head', 1974, TRUE),
+  ('Rêve de la femme noire', 'Ken Bugul', 1990, TRUE),
+  ('Le dernier des immortels', 'Ahmedou Ould-Abdallah', 1995, TRUE)
+) AS v(titre, auteur, annee_publication, disponible)
+JOIN auteurs a ON LOWER(TRIM(a.nom)) = LOWER(TRIM(v.auteur));
 
 -- Emprunts : historique sur environ deux semaines (>= 1 semaine complète).
 -- Retournés (rendus à l'heure ou en retard), en cours, et en retard.

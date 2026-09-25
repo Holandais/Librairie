@@ -1,14 +1,14 @@
 {
-  "name": "akieni-bibliotheque-backend",
+  "name": "bibliotheque-du-quartier-backend",
   "version": "1.0.0",
-  "description": "API Express de la bibliotheque de quartier (image Docker autonome)",
+  "description": "API Express de gestion d'une bibliothèque municipale",
   "main": "server.js",
   "scripts": {
     "start": "node server.js",
     "dev": "nodemon server.js",
-    "db:migrate": "psql -U postgres -d bibliotheque -f db/schema_prod.sql",
-    "db:seed": "psql -U postgres -d bibliotheque -f db/seed_demo.sql",
-    "db:reset": "psql -U postgres -c \"DROP DATABASE IF EXISTS bibliotheque\" -c \"CREATE DATABASE bibliotheque\" && npm run db:migrate && npm run db:seed"
+    "db:migrate": "node scripts/db.js migrate",
+    "db:seed": "node scripts/db.js seed",
+    "db:reset": "node scripts/db.js reset"
   },
   "license": "ISC",
   "dependencies": {

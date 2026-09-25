@@ -1,6 +1,6 @@
 # Déploiement sur Dokploy
 
-Akieni Académie se déploie comme **deux applications Dokploy séparées**
+Cette application se déploie comme **deux applications Dokploy séparées**
 (frontend, backend), toutes deux construites depuis ce même dépôt Git via
 leur propre `Dockerfile`, plus **un service PostgreSQL** géré par Dokploy
 (il n'y a pas de conteneur Postgres dans ce dépôt).
@@ -143,10 +143,10 @@ uniquement (jamais sur une prod avec des données réelles).
 1. Déployer le backend avec **`SEED_ON_START=true`** : au démarrage,
    `start.sh` applique le schéma puis vide les tables et charge le jeu de
    démonstration complet :
-   - 2 comptes staff : `admin@biblio.fr` / `superadmin123` (superadmin),
-     `biblio@biblio.fr` / `biblio123` (bibliothecaire)
-   - 12 adhérents congolais (mot de passe commun `adherent123`)
-   - 14 auteurs français réels et 46 livres, avec un historique d'emprunts
+   - 2 comptes staff : `admin@bibliotheque.local` / `GHS` (superadmin),
+     `bibliothecaire@bibliotheque.local` / `biblio123` (bibliothecaire)
+   - 12 adhérents de démonstration (mot de passe commun `adherent123`)
+   - 14 auteurs et 46 livres de démonstration, avec un historique d'emprunts
      d'environ deux semaines (retournés, en cours, en retard)
 2. **Remettre `SEED_ON_START=false`** (ou retirer la variable) et redéployer.
 3. **Changer immédiatement les mots de passe du seed** (ils sont publics dans
@@ -186,7 +186,7 @@ PGPASSWORD="$DB_PASSWORD" psql -h "$DB_HOST" -p "$DB_PORT" -U "$DB_USER" \
 | `DB_PORT`       | Oui    | `5432`                                      |
 | `DB_USER`       | Oui    | `postgres`                                  |
 | `DB_PASSWORD`   | Oui    | un mot de passe fort                        |
-| `DB_NAME`       | Oui    | `akieni`                                    |
+| `DB_NAME`       | Oui    | `bibliotheque`                              |
 | `JWT_SECRET`    | Oui    | une chaîne aléatoire longue                 |
 | `CORS_ORIGIN`   | Oui    | `https://biblio.exemple.com`                |
 | `PORT`          | Non    | `4000` (défaut)                             |
@@ -234,6 +234,6 @@ PGPASSWORD="$DB_PASSWORD" psql -h "$DB_HOST" -p "$DB_PORT" -U "$DB_USER" \
 Sans Dokploy, pour vérifier qu'une image se construit correctement :
 
 ```bash
-docker build -f backend/Dockerfile -t akieni-backend ./backend
-docker build -f frontend/Dockerfile -t akieni-frontend ./frontend
+docker build -f backend/Dockerfile -t bibliotheque-backend ./backend
+docker build -f frontend/Dockerfile -t bibliotheque-frontend ./frontend
 ```

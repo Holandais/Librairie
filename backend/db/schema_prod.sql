@@ -4,6 +4,8 @@
 -- L'équivalent local (db/schema.sql) est destructif (DROP DATABASE) et ne
 -- doit JAMAIS être exécuté en production.
 
+SET client_encoding = 'UTF8';
+
 -- pg ne supporte pas CREATE TYPE IF NOT EXISTS : on l'entoure d'un bloc DO.
 DO $$
 BEGIN
