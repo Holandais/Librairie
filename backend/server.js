@@ -17,8 +17,30 @@ const statsRoutes = require('./routes/stats.routes');
 
 // Création de l'application Express et configuration du port d'écoute.
 const app = express();
-const PORT = Number(process.env.PORT) || 3000;
+const DEFAULT_PORT = Number(process.env.PORT) || 4000;
 process.env.JWT_SECRET = process.env.JWT_SECRET || 'dev-secret-change-me';
+
+function getAvailablePort(startPort) {
+  const net = require('net');
+
+  return new Promise((resolve, reject) => {
+    const tester = net.createServer();
+
+    tester.once('error', (err) => {
+      if (err.code === 'EADDRINUSE') {
+        resolve(getAvailablePort(startPort + 1));
+        return;
+      }
+      reject(err);
+    });
+
+    tester.once('listening', () => {
+      tester.close(() => resolve(startPort));
+    });
+
+    tester.listen(startPort, '127.0.0.1');
+  });
+}
 
 // Autorise les appels du front local tout en gardant une validation stricte sur les origines.
 const corsOrigins = (process.env.CORS_ORIGIN || '')
@@ -76,7 +98,15 @@ app.use((req, res) => {
 // Middleware final pour les erreurs métier et les exceptions.
 app.use(errorHandler);
 
-// Démarrage du serveur sur le port configuré.
-app.listen(PORT, () => {
-  console.log(`Serveur demarre sur http://localhost:${PORT}`);
-});
+// Démarrage du serveur sur le port configuré, avec fallback automatique si le port choisi est occupé.
+(async () => {
+  try {
+    const PORT = await getAvailablePort(DEFAULT_PORT);
+    app.listen(PORT, () => {
+      console.log(`Serveur demarre sur http://localhost:${PORT}`);
+    });
+  } catch (err) {
+    console.error('Impossible de demarrer le serveur:', err);
+    process.exit(1);
+  }
+})();

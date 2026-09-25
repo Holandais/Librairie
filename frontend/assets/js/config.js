@@ -1,1 +1,1 @@
-window.APP_API_URL = "";
+window.APP_API_URL = "http://localhost:4000";
