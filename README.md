@@ -1,265 +1,251 @@
-# BiblioQuartier — Gestion d'une bibliothèque de quartier
+# Kora Librairie
 
-Projet pratique **Akieni Academy — Cohorte 2 — Semaines 14 & 15** (Module 3 : Backend Node.js, SQL & Express).
+Application de gestion d'une bibliothèque municipale, conçue pour centraliser le catalogue, les utilisateurs, les emprunts et les retards dans une interface simple et professionnelle.
 
-Application complète de gestion d'une bibliothèque : catalogue de livres, auteurs, utilisateurs (adhérents / bibliothécaires / administrateurs), emprunts avec détection des retards, tableau de bord statistique, et **authentification JWT**. Backend **Express + PostgreSQL**, frontend **HTML/CSS/JS** (fetch API).
+Le projet est structuré autour d'un backend Express en Node.js, d'une base PostgreSQL et d'un frontend statique en HTML/CSS/JavaScript. Il couvre la gestion complète du cycle de vie d'une médiathèque : ajout d'ouvrages, gestion des auteurs, suivi des adhérents, emprunts et tableaux de bord.
 
-## Fonctionnalités
+## Objectif du projet
 
-- **Authentification JWT** : register, login, profil. Trois rôles avec accès différent (`adherent`, `bibliothecaire`, `superadmin`)
-- **Utilisateurs** : gestion des comptes (superadmin), historique d'emprunts d'un utilisateur
-- **Auteurs** : CRUD complet (nom, nationalité) — écriture réservée aux bibliothécaires et superadmin
-- **Livres** : CRUD, statut de disponibilité, recherche par titre/auteur, pagination, filtre — écriture réservée aux bibliothécaires et superadmin
-- **Emprunts** : création (refusée si livre déjà emprunté ; un adhérent ne peut emprunter que pour lui-même), retour, listes en cours / en retard
-- **Tableau de bord** : totaux (livres, adhérents, en cours, en retard), livre le plus emprunté, adhérent le plus actif
-- **Bonus** : notifications toast, export CSV des emprunts en retard
+Cette application vise à fournir une solution de gestion documentaire et administrative pour une bibliothèque, avec :
+
+- un catalogue de livres et d'auteurs,
+- la gestion des profils utilisateurs,
+- le suivi des emprunts et des retours,
+- la détection des retards,
+- un tableau de bord de statistiques,
+- une interface web adaptée au besoin d'un service de bibliothèque.
+
+## Fonctionnalités principales
+
+- Authentification JWT avec inscription, connexion et profil utilisateur.
+- Gestion des rôles : adhérent, bibliothécaire et Administrateur général.
+- CRUD complet pour les auteurs et les livres.
+- Gestion des emprunts et des retours avec validation métier.
+- Suivi des emprunts en cours et en retard.
+- Tableau de bord avec indicateurs clés (livres, adhérents, emprunts actifs, retards).
+- Interface utilisateur moderne pour la gestion opérationnelle.
+- Sécurité des routes selon le rôle connecté.
+
+## Vérification sur l'API des livres cités
+
+Le projet ne dépend pas d'une API externe pour les livres cités. Le catalogue est géré par l'API interne du projet elle-même, via les endpoints :
+
+- `GET /api/livres`
+- `GET /api/livres/:id`
+- `POST /api/livres`
+- `PUT /api/livres/:id`
+- `DELETE /api/livres/:id`
+
+Les données sont stockées en base PostgreSQL, ce qui permet un contrôle complet et une évolutivité plus simple que de dépendre d'un service tiers.
+
+## Stack technique
+
+- Node.js 18+
+- Express.js
+- PostgreSQL 14+
+- JWT
+- bcryptjs
+- HTML / CSS / JavaScript vanilla
 
 ## Prérequis
 
-- Node.js 18+
-- PostgreSQL 14+ (serveur démarré)
+Avant de lancer le projet, vérifiez que vous avez :
 
-## Installation
+- Node.js installé et accessible depuis le terminal
+- PostgreSQL installé et démarré
+- un accès local au serveur PostgreSQL avec le compte `postgres`
 
-Le projet npm (dépendances, scripts) vit dans **`backend/`** — c'est aussi le
-dossier de build (Docker) du backend. La racine ne contient ni `package.json`
-ni `node_modules`.
+## Démarrage rapide
+
+1. Cloner le dépôt
 
 ```bash
-# 1. Cloner le dépôt
 git clone <url-du-depot>
-cd akieni_academy
+cd library
+```
 
-# 2. Installer les dépendances
+2. Installer les dépendances du backend
+
+```bash
 cd backend
 npm install
-
-# 3. Configurer l'environnement (.env et .env.example vivent dans backend/)
-copy .env.example .env
-# puis ajuster DB_USER / DB_PASSWORD si besoin
-# IMPORTANT : changer JWT_SECRET pour un secret de production
 ```
+
+3. Configurer l'environnement
+
+Copiez le fichier d'exemple et adaptez les valeurs selon votre environnement local :
 
 ```bash
-# 4. Créer la base (vide puis recrée si elle existe) et charger les données
-npm run db:reset          # DROP/CREATE bibliotheque + schéma + seed démo
-
-#   ou étape par étape :
-npm run db:migrate        # schéma idempotent (backend/db/schema_prod.sql)
-npm run db:seed           # seed de démonstration (backend/db/seed_demo.sql)
-
-# 5. Démarrer le serveur (API + frontend statique)
-npm start                 # ou : npm run dev (rechargement auto)
+copy .env.example .env
 ```
 
-Ouvrir ensuite **http://localhost:3000**.
+Exemple de configuration :
 
-> Variables attendues dans `backend/.env` (voir `backend/.env.example`) :
-> `DB_HOST`, `DB_PORT`, `DB_USER`, `DB_PASSWORD`, `DB_NAME`, `PORT`,
-> `JWT_SECRET`, `JWT_EXPIRES_IN`.
+```env
+DB_HOST=localhost
+DB_PORT=5432
+DB_USER=postgres
+DB_PASSWORD=postgres
+DB_NAME=bibliotheque
+PORT=3000
+JWT_SECRET=votre-cle-secrete-tres-longue
+JWT_EXPIRES_IN=7d
+CORS_ORIGIN=http://localhost:3000
+```
 
-## Comptes de démo
+4. Initialiser la base de données
+
+```bash
+npm run db:reset
+```
+
+Cette commande recrée la base, applique le schéma et charge les données de démonstration.
+
+5. Démarrer le serveur
+
+```bash
+npm start
+```
+
+Le backend et le frontend statique seront disponibles sur :
+
+```text
+http://localhost:3000
+```
+
+## Comptes de démonstration
+
+Les données de démonstration du projet incluent plusieurs comptes de test :
 
 | Rôle | Email | Mot de passe |
 |---|---|---|
-| superadmin | `admin@biblio.fr` | `superadmin123` |
-| bibliothecaire | `biblio@biblio.fr` | `biblio123` |
-| adherent | `t.kabongo@mail.cd` | `adherent123` |
+| Administrateur général (`superadmin`) | `admin@bibliotheque.local` | `GHS` |
+| Bibliothécaire | `bibliothecaire@bibliotheque.local` | `biblio123` |
+| Adhérent | `adh1@bibliotheque.local` | `adherent123` |
 
 ## Structure du projet
 
-```
+```text
+library/
 ├── backend/
-│   ├── server.js              # point d'entrée Express
-│   ├── db.js                  # pool de connexion PostgreSQL
-│   ├── package.json           # projet npm (déps, scripts start/dev/db:*)
-│   ├── package-lock.json
-│   ├── Dockerfile             # image Docker autonome (Build Path = backend)
-│   ├── db/                    # schéma + seeds (une seule source)
-│   │   ├── schema_prod.sql    # schéma idempotent (dev et prod)
-│   │   ├── seed_demo.sql      # jeu de démonstration complet
-│   │   └── seed_prod.sql      # 2 comptes staff seulement (prod)
+│   ├── db/
+│   │   ├── schema_prod.sql
+│   │   ├── seed_demo.sql
+│   │   └── seed_prod.sql
 │   ├── controllers/
-│   │   ├── auth.controller.js   # register, login, me
-│   │   ├── users.controller.js  # gestion des utilisateurs
-│   │   ├── auteurs.controller.js
-│   │   ├── livres.controller.js
-│   │   ├── emprunts.controller.js
-│   │   └── stats.controller.js
-│   ├── routes/
-│   │   ├── auth.routes.js       # POST /register, POST /login, GET /me
-│   │   ├── users.routes.js      # CRUD utilisateurs (protégé)
-│   │   ├── auteurs.routes.js
-│   │   ├── livres.routes.js
-│   │   ├── emprunts.routes.js
-│   │   └── stats.routes.js
 │   ├── middlewares/
-│   │   ├── auth.js              # auth JWT + requireRole
-│   │   ├── validation.js        # validation des champs
-│   │   ├── logger.js            # logs des requêtes
-│   │   └── errorHandler.js      # gestion centralisée des erreurs
-│   ├── .env.example             # modèle de config (copié en .env)
-│   └── utils/
-│       └── response.js          # helpers { status, message, data }
+│   ├── routes/
+│   ├── utils/
+│   ├── .env
+│   ├── .env.example
+│   ├── db.js
+│   ├── package.json
+│   ├── server.js
+│   └── ...
 ├── frontend/
-│   ├── index.html             # tableau de bord (racine, redirect après login)
-│   ├── pages/                 # les autres pages HTML
-│   │   ├── login.html         # connexion
-│   │   ├── livres.html
-│   │   ├── auteurs.html
-│   │   ├── adherents.html
-│   │   ├── utilisateurs.html
-│   │   └── emprunts.html
 │   ├── assets/
-│   │   ├── css/style.css       # design system (sidebar, panels, badges, tables, modales, login)
-│   │   └── js/                 # JS + endpoint API config.js (généré en prod)
-│   └── docker-entrypoint.d/    # injection APP_API_URL → assets/js/config.js
-├── deploy.md                   # procédure Dokploy complète
-└── README.md
+│   ├── pages/
+│   ├── index.html
+│   └── ...
+├── deploy.md
+├── README.md
+└── ...
 ```
 
-## API — endpoints
+## API du projet
 
-### Authentification (public)
+### Authentification
 
 | Méthode | Route | Description |
 |---|---|---|
-| POST | `/api/auth/register` | Créer un compte (rôle `adherent` par défaut) `{ nom, telephone, email, password }` |
-| POST | `/api/auth/login` | Connexion `{ email, password }` → retourne `{ user, token }` |
-| GET | `/api/auth/me` | Profil de l'utilisateur connecté (requiert `Authorization: Bearer <token>`) |
+| POST | `/api/auth/register` | Créer un compte utilisateur |
+| POST | `/api/auth/login` | Connecter un utilisateur |
+| GET | `/api/auth/me` | Récupérer le profil connecté |
 
-### Utilisateurs (protégé)
+### Utilisateurs
 
-| Méthode | Rôle requis | Route | Description |
-|---|---|---|---|
-| GET | bibliothecaire, superadmin | `/api/users?role=&q=&page=&limit=` | Liste des utilisateurs (filtrable par rôle) |
-| GET | tous authentifiés | `/api/users/:id` | Détail d'un utilisateur |
-| GET | tous authentifiés | `/api/users/:id/emprunts` | Historique des emprunts d'un utilisateur (un adhérent ne voit que les siens) |
-| POST | bibliothecaire, superadmin | `/api/users` | Créer un utilisateur `{ nom, email, password, role }` |
-| PUT | superadmin (ou soi-même) | `/api/users/:id` | Modifier un utilisateur (nom, telephone, email, password, role) |
-| DELETE | superadmin | `/api/users/:id` | Supprimer un utilisateur |
+| Méthode | Route | Description |
+|---|---|---|
+| GET | `/api/users` | Lister les utilisateurs |
+| GET | `/api/users/:id` | Détail d'un utilisateur |
+| POST | `/api/users` | Créer un utilisateur |
+| PUT | `/api/users/:id` | Modifier un utilisateur |
+| DELETE | `/api/users/:id` | Supprimer un utilisateur |
 
-### Auteurs (protégé — écriture : bibliothecaire / superadmin)
+### Auteurs
 
 | Méthode | Route | Description |
 |---|---|---|
 | GET | `/api/auteurs` | Liste des auteurs |
-| GET | `/api/auteurs/:id` | Un auteur |
-| POST | `/api/auteurs` | Créer un auteur `{ nom, nationalite }` |
+| GET | `/api/auteurs/:id` | Détail d'un auteur |
+| POST | `/api/auteurs` | Ajouter un auteur |
 | PUT | `/api/auteurs/:id` | Modifier un auteur |
 | DELETE | `/api/auteurs/:id` | Supprimer un auteur |
 
-### Livres (protégé — écriture : bibliothecaire / superadmin)
+### Livres
 
 | Méthode | Route | Description |
 |---|---|---|
-| GET | `/api/livres?q=&auteur=&disponible=&page=&limit=` | Catalogue (recherche, filtre, pagination) |
-| GET | `/api/livres/:id` | Un livre (+ nom de l'auteur) |
-| POST | `/api/livres` | Créer un livre `{ titre, auteur_id, annee_publication }` |
+| GET | `/api/livres` | Liste des livres avec filtres et pagination |
+| GET | `/api/livres/:id` | Détail d'un livre |
+| POST | `/api/livres` | Ajouter un livre |
 | PUT | `/api/livres/:id` | Modifier un livre |
 | DELETE | `/api/livres/:id` | Supprimer un livre |
 
-### Emprunts (protégé)
+### Emprunts
 
 | Méthode | Route | Description |
 |---|---|---|
-| GET | `/api/emprunts?statut=en_cours\|en_retard` | Emprunts (un adhérent ne voit que les siens) |
-| POST | `/api/emprunts` | Créer un emprunt `{ user_id, livre_id, date_retour_prevue }` |
-| PUT | `/api/emprunts/:id/retour` | Enregistrer le retour d'un livre |
+| GET | `/api/emprunts` | Lister les emprunts |
+| POST | `/api/emprunts` | Créer un emprunt |
+| PUT | `/api/emprunts/:id/retour` | Enregistrer un retour |
 
-### Statistiques & santé (protégé / public)
+### Santé et statistiques
 
 | Méthode | Route | Description |
 |---|---|---|
-| GET | `/api/health` | État du serveur + connexion DB (public) |
-| GET | `/api/stats` | Totaux, livre le plus emprunté, adhérent le plus actif (requiert auth) |
+| GET | `/api/health` | Vérifier la disponibilité du serveur et de la base |
+| GET | `/api/stats` | Statistiques globales du système |
 
-### Format des réponses
+## Modèle de données
 
-Toutes les réponses API utilisent le format :
+Le système repose sur 4 tables principales :
 
-```json
-{
-  "status": "success",
-  "message": "Description du résultat",
-  "data": { ... }
-}
-```
+- `users`
+- `auteurs`
+- `livres`
+- `emprunts`
 
-En cas d'erreur :
+Les relations principales sont :
 
-```json
-{
-  "status": "error",
-  "message": "Description de l'erreur",
-  "data": null
-}
-```
+- `livres.auteur_id` → `auteurs.id`
+- `emprunts.user_id` → `users.id`
+- `emprunts.livre_id` → `livres.id`
 
-Codes HTTP utilisés : **200** succès, **201** création, **400** validation/métier, **401** non authentifié, **403** droits insuffisants, **404** introuvable, **500** serveur.
+Les règles métier couvertes comprennent :
 
-## Modélisation des données
+- validation de l'authentification,
+- restriction des accès selon le rôle,
+- impossibilité d'emprunter un livre déjà en cours,
+- contrôle du retour d'un ouvrage,
+- détection automatique des retards.
 
-### Choix de modélisation
+## Sécurité et permissions
 
-- **4 tables** : `users`, `auteurs`, `livres`, `emprunts`. Pas de table d'association : un livre n'a qu'un seul auteur et un emprunt lie exactement un utilisateur à un livre.
-- `users` contient tous les comptes avec un champ `role` enum (`adherent`, `bibliothecaire`, `superadmin`). Les adhérents ne sont plus une table séparée mais un rôle de la table `users`.
-- `livres.auteur_id` → `auteurs.id` (`ON DELETE CASCADE`) : supprimer un auteur retire ses livres.
-- `emprunts.user_id` / `emprunts.livre_id` (`ON DELETE CASCADE`) : l'historique suit la suppression d'un utilisateur ou d'un livre.
-- `livres.disponible` (booléen) : dénormalisation volontaire pour afficher le statut sans jointure ; synchronisé par le backend à la création d'un emprunt (`FALSE`) et au retour (`TRUE`).
-- Cycle de vie d'un emprunt : `date_retour_effective IS NULL` = en cours ; `date_retour_effective IS NULL AND date_retour_prevue < NOW()` = en retard.
-- Index sur `livres(titre)`, `livres(auteur_id)`, `livres(disponible)`, `users(email)` et les clés étrangères.
+Les routes sensibles sont protégées par JWT et par un contrôle de rôle. En pratique :
 
-### Diagramme entité-relation
+- les adhérents ont accès à leur profil et à leur historique d'emprunts,
+- les bibliothécaires gèrent le catalogue et les adhérents,
+- l'Administrateur général dispose des droits complets sur l'application.
 
-```mermaid
-erDiagram
-    USERS ||--o{ EMPRUNTS : "effectue"
-    AUTEURS ||--o{ LIVRES : "écrit"
-    LIVRES ||--o{ EMPRUNTS : "concerné par"
+## Déploiement
 
-    USERS {
-        int id PK
-        varchar nom
-        varchar telephone
-        varchar email UK
-        varchar password
-        user_role role
-        timestamp created_at
-    }
-    AUTEURS {
-        int id PK
-        varchar nom
-        varchar nationalite
-        timestamp created_at
-    }
-    LIVRES {
-        int id PK
-        varchar titre
-        int auteur_id FK
-        int annee_publication
-        boolean disponible
-        timestamp created_at
-    }
-    EMPRUNTS {
-        int id PK
-        int user_id FK
-        int livre_id FK
-        timestamp date_emprunt
-        timestamp date_retour_prevue
-        timestamp date_retour_effective
-        timestamp created_at
-    }
-```
+Un guide de déploiement complet est disponible dans le fichier `deploy.md`.
 
-### Rôles et permissions
+## Licence
 
-| Action | adherent | bibliothecaire | superadmin |
-|---|:---:|:---:|:---:|
-| Voir catalogue (livres, auteurs) | ✅ | ✅ | ✅ |
-| Consulter son historique d'emprunts | ✅ | ✅ | ✅ |
-| Créer un emprunt (pour soi-même) | ✅ | ✅ | ✅ |
-| Retourner un emprunt (le sien) | ✅ | ✅ | ✅ |
+Ce projet est fourni à titre d'exercice de développement et de démonstration technique.
+
 | CRUD auteurs | ❌ | ✅ | ✅ |
 | CRUD livres | ❌ | ✅ | ✅ |
 | Créer/modifier adhérents | ❌ | ✅ | ✅ |

@@ -3,27 +3,65 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Connexion — BiblioQuartier</title>
+<title>Connexion — Kora Librairie</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600&family=Geist+Mono:wght@400;500;600&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700;800&family=Geist+Mono:wght@400;500;600;700&display=swap">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer">
 <link rel="stylesheet" href="../assets/css/style.css">
 </head>
 <body id="page-login">
 
 <div class="login-view">
-  <div class="login-card">
-    <div class="login-brand">
-      <div class="brand-mark"><i class="fa-solid fa-book-open"></i></div>
-      <div class="brand-name"><b>BiblioQuartier</b><span>Gestion de bibliothèque</span></div>
-    </div>
-    <form class="login-form" id="login-form">
-      <div class="alert danger" id="login-error" hidden></div>
-      <label>Email<input class="field" id="login-email" type="email" autocomplete="username" placeholder="admin@biblio.fr"></label>
-      <label>Mot de passe<input class="field" id="login-password" type="password" autocomplete="current-password" placeholder="••••••••"></label>
-      <button class="btn accent block" type="submit"><i class="fa-solid fa-right-to-bracket"></i> Se connecter</button>
-    </form>
+  <div class="login-shell">
+    <aside class="login-spotlight">
+      <div class="login-brand">
+        <div class="brand-mark"><i class="fa-solid fa-book-open"></i></div>
+        <div class="brand-name"><b>Kora Librairie</b><span>Gestion intelligente</span></div>
+      </div>
+
+      <div class="spotlight-copy">
+        <span class="eyebrow">Système de gestion</span>
+        <h1>Une bibliothèque numérique</h1>
+        <p>Suivez les emprunts, gérez les ressources, pilotez les adhérents et centralisez toute l’activité de votre médiathèque depuis une interface moderne.</p>
+      </div>
+
+      <ul class="feature-list">
+        <li><i class="fa-solid fa-check"></i> Suivi optimal des emprunts</li>
+        <li><i class="fa-solid fa-check"></i> Catalogue centralisé</li>
+        <li><i class="fa-solid fa-check"></i> Tableau de bord en temps réel</li>
+      </ul>
+    </aside>
+
+    <main class="login-panel">
+      <div class="login-card">
+        <div class="panel-header-mini">
+          <span class="eyebrow accent">Accès sécurisé</span>
+          <h2>Connexion</h2>
+        </div>
+
+        <form class="login-form" id="login-form">
+          <div class="alert danger" id="login-error" hidden></div>
+          <div class="alert info demo-alert">
+            <strong>Compte de démonstration</strong><br>
+            admin@bibliotheque.local / GHS
+          </div>
+
+          <label>
+            <span>Email</span>
+            <input class="field" id="login-email" type="email" autocomplete="username" placeholder="admin@bibliotheque.local">
+          </label>
+
+          <label>
+            <span>Mot de passe</span>
+            <input class="field" id="login-password" type="password" autocomplete="current-password" placeholder="••••••••">
+          </label>
+
+          <button class="btn accent block" type="submit"><i class="fa-solid fa-right-to-bracket"></i> Se connecter</button>
+          <button class="btn block secondary" type="button" id="demo-login-btn"><i class="fa-solid fa-user-check"></i> Remplir le compte de test</button>
+        </form>
+      </div>
+    </main>
   </div>
 </div>
 
